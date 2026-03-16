@@ -1,97 +1,89 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
- * Room
- * Represents room details in the system.
+ * Reservation
+ * Represents a guest booking request.
  *
- * @version 4.0
+ * @version 5.0
  */
-class Room {
+class Reservation {
 
-    private String type;
-    private int price;
-    private String amenities;
+    private String guestName;
+    private String roomType;
 
-    public Room(String type, int price, String amenities) {
-        this.type = type;
-        this.price = price;
-        this.amenities = amenities;
+    public Reservation(String guestName, String roomType) {
+        this.guestName = guestName;
+        this.roomType = roomType;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void displayDetails() {
-        System.out.println("Room Type: " + type);
-        System.out.println("Price: $" + price);
-        System.out.println("Amenities: " + amenities);
+    public void displayReservation() {
+        System.out.println("Guest: " + guestName + " | Requested Room: " + roomType);
     }
 }
 
 /**
- * RoomInventory
- * Maintains centralized availability state.
+ * BookingRequestQueue
+ * Manages incoming booking requests using FIFO queue.
  *
- * @version 4.0
+ * @version 5.0
  */
-class RoomInventory {
+class BookingRequestQueue {
 
-    private HashMap<String, Integer> inventory;
+    private Queue<Reservation> queue;
 
-    public RoomInventory() {
-        inventory = new HashMap<>();
-
-        inventory.put("Single", 5);
-        inventory.put("Double", 3);
-        inventory.put("Suite", 0); // Example unavailable room
+    public BookingRequestQueue() {
+        queue = new LinkedList<>();
     }
 
-    public int getAvailability(String roomType) {
-        return inventory.getOrDefault(roomType, 0);
+    /**
+     * Add reservation request to queue
+     */
+    public void addRequest(Reservation reservation) {
+        queue.add(reservation);
+        System.out.println("Booking request added to queue.");
     }
 
-    public Map<String, Integer> getInventory() {
-        return inventory;
+    /**
+     * Display all queued requests
+     */
+    public void displayRequests() {
+
+        System.out.println("\nCurrent Booking Request Queue:");
+
+        for (Reservation r : queue) {
+            r.displayReservation();
+        }
     }
 }
 
 /**
- * UseCase4RoomSearch
- * Demonstrates read-only room search functionality.
+ * UseCase5BookingRequestQueue
+ * Demonstrates booking request intake using FIFO queue.
  *
- * @version 4.1
+ * @version 5.1
  */
 public class BookMyStayApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Book My Stay - Hotel Booking System v4.1\n");
+        System.out.println("Book My Stay - Hotel Booking System v5.1\n");
 
-        RoomInventory inventory = new RoomInventory();
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        Room single = new Room("Single", 100, "WiFi, TV, AC");
-        Room doubleRoom = new Room("Double", 180, "WiFi, TV, AC, Mini Bar");
-        Room suite = new Room("Suite", 350, "WiFi, TV, AC, Mini Bar, Jacuzzi");
+        // Guest booking requests
+        Reservation r1 = new Reservation("Alice", "Single");
+        Reservation r2 = new Reservation("Bob", "Double");
+        Reservation r3 = new Reservation("Charlie", "Suite");
 
-        Room[] rooms = {single, doubleRoom, suite};
+        // Add requests to queue (FIFO order)
+        bookingQueue.addRequest(r1);
+        bookingQueue.addRequest(r2);
+        bookingQueue.addRequest(r3);
 
-        System.out.println("Available Rooms:\n");
+        // Display queued requests
+        bookingQueue.displayRequests();
 
-        for (Room room : rooms) {
-
-            int available = inventory.getAvailability(room.getType());
-
-            // Defensive check: only show rooms with availability > 0
-            if (available > 0) {
-
-                room.displayDetails();
-                System.out.println("Available Count: " + available);
-                System.out.println("---------------------------");
-            }
-        }
-
-        System.out.println("\nSearch completed. (Inventory unchanged)");
+        System.out.println("\nRequests stored in arrival order. Awaiting processing.");
     }
 }
