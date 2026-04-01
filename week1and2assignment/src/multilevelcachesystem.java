@@ -12,7 +12,8 @@ void main() {
         // Constructor (simulate existing users)
         public UsernameChecker() {
             userMap.put("john_doe", 101);
-            userMap.put("admin", 1);
+            userMap.put("admin", 1);git init
+            git branch -M main
             userMap.put("user123", 102);
         }
 
