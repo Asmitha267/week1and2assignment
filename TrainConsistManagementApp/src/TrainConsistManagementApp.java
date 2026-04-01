@@ -1,19 +1,17 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-// Bogie class
+// Reusing Bogie class from UC7
 class Bogie {
     String name;
     int capacity;
 
-    // Constructor
     Bogie(String name, int capacity) {
         this.name = name;
         this.capacity = capacity;
     }
 
-    // Display method
     @Override
     public String toString() {
         return name + " (Capacity: " + capacity + ")";
@@ -26,29 +24,27 @@ public class TrainConsistManagementApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Create list of bogies
+        // Original list
         List<Bogie> bogies = new ArrayList<>();
-
-        // Add bogies
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 40));
 
-        // Display before sorting
-        System.out.println("\nBefore Sorting:");
+        // Display original list
+        System.out.println("\nAll Bogies:");
         System.out.println(bogies);
 
-        // Sort bogies by capacity (ascending)
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        // Filter bogies with capacity > 60
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-        // Display after sorting
-        System.out.println("\nAfter Sorting by Capacity (Ascending):");
-        System.out.println(bogies);
+        // Display filtered result
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        System.out.println(filteredBogies);
 
-        // Sort in descending order (optional enhancement)
-        bogies.sort(Comparator.comparingInt((Bogie b) -> b.capacity).reversed());
-
-        System.out.println("\nAfter Sorting by Capacity (Descending):");
+        // Verify original list unchanged
+        System.out.println("\nOriginal List After Filtering (Unchanged):");
         System.out.println(bogies);
     }
 }
