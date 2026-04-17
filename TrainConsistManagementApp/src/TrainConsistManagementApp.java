@@ -1,50 +1,54 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-// Reusing Bogie class from UC7
-class Bogie {
-    String name;
-    int capacity;
-
-    Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (Capacity: " + capacity + ")";
-    }
-}
-
+// Main class
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App ===");
-
-        // Original list
         List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 40));
 
-        // Display original list
-        System.out.println("\nAll Bogies:");
-        System.out.println(bogies);
+        bogies.add(new Bogie("B1", "Sleeper"));
+        bogies.add(new Bogie("B2", "AC Chair"));
+        bogies.add(new Bogie("B3", "Sleeper"));
+        bogies.add(new Bogie("B4", "First Class"));
+        bogies.add(new Bogie("B5", "AC Chair"));
+        bogies.add(new Bogie("B6", "Rectangular"));
 
-        // Filter bogies with capacity > 60
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
+        Map<String, List<Bogie>> groupedBogies =
+                bogies.stream()
+                        .collect(Collectors.groupingBy(Bogie::getType));
 
-        // Display filtered result
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        System.out.println(filteredBogies);
+        System.out.println("=== Grouped Bogies by Type ===\n");
 
-        // Verify original list unchanged
-        System.out.println("\nOriginal List After Filtering (Unchanged):");
-        System.out.println(bogies);
+        groupedBogies.forEach((type, list) -> {
+            System.out.println("Type: " + type);
+            list.forEach(System.out::println);
+            System.out.println();
+        });
+    }
+}
+
+// Bogie class (same file, non-public)
+class Bogie {
+    private String bogieId;
+    private String type;
+
+    public Bogie(String bogieId, String type) {
+        this.bogieId = bogieId;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getBogieId() {
+        return bogieId;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + bogieId + " - " + type + "]";
     }
 }
